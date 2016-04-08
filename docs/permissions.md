@@ -26,3 +26,9 @@ Project Role | Description
 Viewer | Can be used to remove Deployer or Admin Project Role and rely on his system level role.
 Deployer | Can deploy a project, regardless if his system level role.
 Admin | Deployer + can setup and configure the project, regardless of his system level role.
+
+# Stage Roles
+
+Follow the Project Roles:
+
+If a stage's deploy role is `Deployer`, then it can be deployed by `Deployer` and `Admin`
