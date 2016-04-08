@@ -49,8 +49,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       ENV['GITLAB_SECRET'],
       client_options: {
         site: ENV['GITLAB_SITE'],
-        authorize_url: ENV['GITLAB_AUTHORIZE_URL'] || '/oauth/authorize',
-        token_url: ENV['GITLAB_TOKEN_URL'] || '/oauth/token'
+        authorize_url: ENV['GITLAB_AUTHORIZE_URL'] || "#{ENV['GITLAB_SITE']}/oauth/authorize",
+        token_url: ENV['GITLAB_TOKEN_URL'] || "#{ENV['GITLAB_SITE']}/oauth/token"
       }
   end
 end
