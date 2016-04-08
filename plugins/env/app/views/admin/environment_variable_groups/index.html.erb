@@ -1,0 +1,44 @@
+<% title = "Environment variables" %>
+<% content_for(:page_title, title) %>
+
+<%= breadcrumb(title) %>
+
+<h1><%= title %></h1>
+
+<%= link_to "New", new_admin_environment_variable_group_path %>
+
+<hr/>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Variables</th>
+    <th>Projects</th>
+  </tr>
+  <% @groups.each do |group| %>
+    <tr>
+      <td><%= link_to group.name, [:admin, group] %></td>
+      <td>
+        <ul>
+          <% group.environment_variables.map(&:name).uniq.sort.each do |name| %>
+            <li><%= name %></li>
+          <% end %>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <% group.projects.sort_by(&:name).each do |project| %>
+            <li><%= link_to project.name, project %></li>
+          <% end %>
+        </ul>
+      </td>
+      <td>
+        <% if group.projects.any? %>
+          <%= link_to "Delete", "#", data: {confirm: "Cannot be deleted when still in use."} %>
+        <% else %>
+          <%= link_to "Delete", [:admin, group], data: {method: :delete, confirm: "Delete #{group.name} ?"} %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

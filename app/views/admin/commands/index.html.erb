@@ -1,0 +1,58 @@
+<h1>Commands</h1>
+
+<%= form_tag '?', method: :get, class: 'clearfix' do %>
+  <div class="col-sm-6" style="padding-left: 0;">
+    <%= label_tag "Search" %>
+    <%= text_field_tag 'search[query]', params[:search].try(:[], :query), class: "form-control" %>
+  </div>
+  <div class="col-sm-3">
+    <%= label_tag "Project" %><br/>
+    <% options = options_for_select([['Global', 'global']] + Project.order('name asc').pluck(:name, :id), params[:search].try(:[], :project_id)) %>
+    <%= select_tag 'search[project_id]', options, include_blank: "All", class: "form-control", style: "background-color: white; width: 100%; height: 35px" %>
+  </div>
+  <div class="col-sm-2">
+    <%= submit_tag 'Find', style: 'margin-top: 26px; padding: 6px 20px' %>
+  </div>
+<% end %>
+
+<section class="clearfix">
+  <table class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>Project</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% usage_ids = Command.usage_ids %>
+      <% @commands.each do |command| %>
+        <tr>
+          <td>
+            <pre class="pre-command pre-scrollable"><%= command.command %></pre>
+          </td>
+          <td><%= command.project.try(:name) ? command.project.name : "Global" %></td>
+          <td>
+            <%= link_to "Edit", edit_admin_command_path(command) %>
+            |
+            <% used = usage_ids.count(command.id) %>
+            <% if used > 0 %>
+              <%= content_tag :span, "Used by #{used}", title: "Click Edit to see usage details" %>
+            <% else %>
+              <%= link_to_delete([:admin, command]) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="admin-actions">
+    <div class="pull-right">
+      <%= link_to "New command", new_admin_command_path, class: "btn btn-default" %>
+    </div>
+
+    <%= paginate @commands %>
+  </div>
+</section>
